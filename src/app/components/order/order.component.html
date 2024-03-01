@@ -1,0 +1,105 @@
+<section class="container d-flex justify-content-center  mt-4 mt-lg-5 pb-4 pb-lg-5">
+    <form class="w-50" id="form" method="post" [formGroup]="orderForm" *ngIf="!successResponse">
+        <h2 class="text-center mb-4 mb-lg-5 fw-bold">Сделать заказ</h2>
+        <div class="row mb-3">
+            <div class="col">
+                <label for="address" class="fs-5 mb-1">Товар</label>
+                <input class="input form-control rounded w-100 py-2" id="product" type="text" formControlName="product">
+            </div>
+        </div>
+        <div class="row row-cols-1 row-cols-lg-3 mb-2">
+            <div class="col">
+                <label for="firstName" class="fs-5 mb-1">Имя</label>
+                <input class="input form-control rounded w-100 py-2"
+                       formControlName="firstName" id="firstName" type="text">
+                <div class="w-100"
+                     *ngIf="orderForm.get('firstName')?.invalid && (orderForm.get('firstName')?.touched || orderForm.get('firstName')?.dirty)">
+                    <div class="invalid-feedback" *ngIf="orderForm.get('firstName')?.errors?.['required']">
+                        Обязательное поле.
+                    </div>
+                    <div class="invalid-feedback" *ngIf="orderForm.get('firstName')?.errors?.['pattern']">
+                        Можно использовать только буквы.
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <label for="lastName" class="fs-5 mb-1">Фамилия</label>
+                <input class="input form-control rounded w-100 py-2" formControlName="lastName"
+                       id="lastName" type="text">
+                <div class="w-100"
+                     *ngIf="orderForm.get('lastName')?.invalid && (orderForm.get('lastName')?.touched || orderForm.get('lastName')?.dirty)">
+                    <div class="invalid-feedback" *ngIf="orderForm.get('lastName')?.errors?.['required']">
+                        Обязательное поле.
+                    </div>
+                    <div class="invalid-feedback" *ngIf="orderForm.get('lastName')?.errors?.['pattern']">
+                        Можно использовать только буквы.
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <label for="phone" class="fs-5 mb-1">Телефон</label>
+                <input class="input form-control rounded w-100 py-2" id="phone" type="text" formControlName="phone">
+                <div class="w-100"
+                     *ngIf="orderForm.get('phone')?.invalid && (orderForm.get('phone')?.touched || orderForm.get('phone')?.dirty)">
+                    <div class="invalid-feedback" *ngIf="orderForm.get('phone')?.errors?.['required']">
+                        Обязательное поле.
+                    </div>
+                    <div class="invalid-feedback" *ngIf="orderForm.get('phone')?.errors?.['pattern']">
+                        Не корректный номер телефона.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row row-cols-1 row-cols-lg-2 mb-2">
+            <div class="col">
+                <label for="country" class="fs-5 mb-1">Страна</label>
+                <input class="input form-control rounded w-100 py-2" id="country" type="text" formControlName="country">
+                <div class="invalid-feedback" *ngIf="orderForm.get('country')?.invalid
+              && (orderForm.get('country')?.touched || orderForm.get('country')?.dirty)
+              && orderForm.get('country')?.errors?.['required']">
+                    Обязательное поле.
+                </div>
+            </div>
+            <div class="col">
+                <label for="zip" class="fs-5 mb-1">Индекс</label>
+                <input class="input form-control rounded w-100 py-2" id="zip" type="text" formControlName="zip">
+                <div class="invalid-feedback" *ngIf="orderForm.get('zip')?.invalid
+              && (orderForm.get('zip')?.touched || orderForm.get('zip')?.dirty)
+              && orderForm.get('zip')?.errors?.['required']">
+                    Обязательное поле.
+                </div>
+            </div>
+        </div>
+        <div class="row mb-2">
+            <div class="col">
+                <label for="address" class="fs-5 mb-1">Адрес</label>
+                <input class="input form-control rounded w-100 py-2" id="address" type="text" formControlName="address">
+                <div class="w-100"
+                     *ngIf="orderForm.get('address')?.invalid && (orderForm.get('address')?.touched || orderForm.get('address')?.dirty)">
+                    <div class="invalid-feedback" *ngIf="orderForm.get('address')?.errors?.['required']">
+                        Обязательное поле.
+                    </div>
+                    <div class="invalid-feedback" *ngIf="orderForm.get('address')?.errors?.['pattern']">
+                        Можно вводить: буквы, цифры, пробелы, дефис и слеш.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="fs-5 mb-1" for="floatingTextarea">Комментарий к заказу</label>
+            <textarea class="form-control" placeholder="" id="floatingTextarea" formControlName="comment"></textarea>
+        </div>
+        <div class="row">
+            <div class="col-12 col-lg-4">
+                <button type="button" class="btn btn-primary w-100 hvr-grow-shadow" id="submit-button"
+                        (click)="submit()" [disabled]="loading">
+                    Отправить
+                </button>
+                <div class="error text-danger mt-2 w-100" *ngIf="errorResponse">Произошла ошибка. Попробуйте еще раз.</div>
+            </div>
+        </div>
+    </form>
+    <div class="new-popup w-50 border border-primary rounded p-5 justify-content-center align-items-center" *ngIf="successResponse">
+        <p class="fs-2 text-center">Спасибо за заказ. Мы свяжемся с вами в ближайшее время!</p>
+    </div>
+</section>

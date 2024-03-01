@@ -1,0 +1,21 @@
+<section class="container">
+
+    <div class="row" *ngIf="product.id !== 0">
+        <div class="col-3">
+            <img src="{{product.image}}" class="card-img-top w-100" alt="Товар 1">
+            <a routerLink="/order" [queryParams]="{product: product.title}"
+               class="btn btn-primary w-100 hvr-grow-shadow">Купить</a>
+        </div>
+        <div class="col-9">
+            <p class="h4 text-uppercase">{{product.title}}</p>
+            <p class="fs-6">{{product.description}}</p>
+            <p class="fs-4">Цена: {{product.price}} руб/кг</p>
+        </div>
+    </div>
+    <div class="popup" *ngIf="loading">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+</section>
+
