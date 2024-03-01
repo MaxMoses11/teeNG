@@ -26,13 +26,15 @@ export class CatalogComponent implements OnInit, OnDestroy {
         //     this.subject.next(this.searchInput.value);
         // }
 
-
+        this.subject
+            .subscribe((data) => {
+                if (data) {
+                    console.log(data)
+                }
+            });
     }
 
     ngOnInit(): void {
-        if (this.searchInput){
-            this.subject.next(this.searchInput.value);
-        }
         console.log('test')
         if (this.searchBtn) {
             this.searchBtn.addEventListener('click', () => {
@@ -40,30 +42,27 @@ export class CatalogComponent implements OnInit, OnDestroy {
             })
         }
 
-        // this.loading = true;
-        // this.subscriptionProducts = this.productService.getProducts()
-        //     .pipe(
-        //         tap(() => {
-        //             this.loading = false;
-        //         })
-        //     )
-        //     .subscribe({
-        //         next: (data) => {
-        //             this.products = data;
-        //         },
-        //         error: () => {
-        //             this.router.navigate(['/']).then();
-        //         }
-        //     });
+        this.loading = true;
+        this.subscriptionProducts = this.productService.getProducts()
+            .pipe(
+                tap(() => {
+                    this.loading = false;
+                })
+            )
+            .subscribe({
+                next: (data) => {
+                    this.products = data;
+                },
+                error: () => {
+                    this.router.navigate(['/']).then();
+                }
+            });
     }
 
     testing() {
-        this.subject
-            .subscribe((data) => {
-                if (data) {
-                    console.log(data)
-                }
-            });
+        if (this.searchInput){
+            this.subject.next(this.searchInput.value);
+        }
     }
 
     ngOnDestroy() {
