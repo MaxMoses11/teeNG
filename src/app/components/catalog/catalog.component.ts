@@ -1,8 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ProductService} from "../../services/product.service";
-import {Subject, Subscription, tap} from "rxjs";
+import {Subscription, tap} from "rxjs";
 import {ProductType} from "../../types/product.type";
 import {Router} from "@angular/router";
+import {SearchService} from "../../services/search.service";
 
 @Component({
     selector: 'app-catalog',
@@ -10,38 +11,62 @@ import {Router} from "@angular/router";
     styleUrls: ['./catalog.component.scss']
 })
 export class CatalogComponent implements OnInit, OnDestroy {
-    private subject: Subject<string>;
-    private searchInput: HTMLInputElement | null = document.getElementById('search-input') as HTMLInputElement;
-    private searchBtn: HTMLElement | null = document.getElementById('search-btn');
     private subscriptionProducts: Subscription | null = null;
     private subscriptionSubject: Subscription | null = null;
+    private subscriptionSearch: Subscription | null = null;
+    private productsElement: HTMLElement | null = null;
+    private productsTitleElement: HTMLElement | null = null;
+    searchString: string = '';
     products: ProductType[] = [];
     loading: boolean = false;
 
     constructor(private productService: ProductService,
-                private router: Router) {
-        this.subject = new Subject<string>();
+                private router: Router,
+                private searchService: SearchService) { }
 
-        // if (this.searchInput && this.searchInput.value) {
-        //     this.subject.next(this.searchInput.value);
-        // }
-
-        this.subject
+    ngOnInit(): void {
+        this.productsElement = document.getElementById('products');
+        this.productsTitleElement = document.getElementById('products-title');
+        if (this.searchService.searchString) {
+            this.searchString = this.searchService.searchString;
+            this.searchInCatalog(this.searchString);
+        } else {
+            this.getProductsInCatalog();
+        }
+        this.subscriptionSubject = this.searchService.searchProducts
             .subscribe((data) => {
-                if (data) {
-                    console.log(data)
+                this.searchInCatalog(data);
+            });
+    }
+
+    searchInCatalog(search: string) {
+        this.loading = true;
+        let hasSearchString = true;
+        if (!search) {
+            hasSearchString = false;
+        }
+        this.subscriptionSearch = this.searchService.searchInCatalog(search)
+            .pipe(
+                tap(() => {
+                    this.loading = false;
+                })
+            )
+            .subscribe({
+                next: (data) => {
+                    if (this.productsElement && hasSearchString) {
+                        this.showSearchResult(data, search);
+                    } else {
+                        this.products = data as ProductType[];
+                        this.productsTitleElement!.innerText = 'Наши чайные коллекции';
+                    }
+                },
+                error: () => {
+                    this.router.navigate(['/']).then();
                 }
             });
     }
 
-    ngOnInit(): void {
-        console.log('test')
-        if (this.searchBtn) {
-            this.searchBtn.addEventListener('click', () => {
-                this.testing();
-            })
-        }
-
+    getProductsInCatalog() {
         this.loading = true;
         this.subscriptionProducts = this.productService.getProducts()
             .pipe(
@@ -59,14 +84,21 @@ export class CatalogComponent implements OnInit, OnDestroy {
             });
     }
 
-    testing() {
-        if (this.searchInput){
-            this.subject.next(this.searchInput.value);
+    showSearchResult(obj: any, search: string) {
+        this.products = [];
+        for (let objKey in obj) {
+            this.products.push(obj[objKey]);
+        }
+        if (this.productsTitleElement) {
+            this.productsTitleElement.innerText = this.products.length > 0 ? `Результаты поиска по запросу "${search}"` : 'Ничего не найдено';
         }
     }
 
     ngOnDestroy() {
         this.subscriptionProducts?.unsubscribe();
         this.subscriptionSubject?.unsubscribe();
+        this.subscriptionSearch?.unsubscribe();
+        this.searchString = '';
+        this.searchService.searchString = '';
     }
 }

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {Router} from "@angular/router";
+import {SearchService} from "./services/search.service";
 
 @Component({
   selector: 'app-root',
@@ -7,7 +8,14 @@ import {Router} from "@angular/router";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  searchInput: HTMLInputElement | null = document.getElementById('search-input') as HTMLInputElement;
-  constructor(private router: Router) {
+  searchString: string = '';
+  constructor(private router: Router,
+              private searchService: SearchService) {
+  }
+
+  handleClick() {
+    this.searchService.searchString = this.searchString;
+    this.searchService.searchProducts.next(this.searchString);
+    this.router.navigate(['/catalog']);
   }
 }
