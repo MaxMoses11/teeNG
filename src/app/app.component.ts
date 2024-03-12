@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
-import {Router} from "@angular/router";
-import {SearchService} from "./services/search.service";
+import {Component, ViewChild} from '@angular/core';
+import {HeaderComponent} from "./shared/layout/header/header.component";
 
 @Component({
   selector: 'app-root',
@@ -8,14 +7,7 @@ import {SearchService} from "./services/search.service";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  searchString: string = '';
-  constructor(private router: Router,
-              private searchService: SearchService) {
+  constructor() {
   }
 
-  handleClick() {
-    this.searchService.searchString = this.searchString;
-    this.searchService.searchProducts.next(this.searchString);
-    this.router.navigate(['/catalog']);
-  }
 }

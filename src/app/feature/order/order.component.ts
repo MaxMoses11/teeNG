@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
 import {Subscription, tap} from "rxjs";
-import {OrderService} from "../../services/order.service";
-import {OrderType} from "../../types/order.type";
+import {OrderService} from "../../shared/services/order.service";
+import {OrderType} from "../../../types/order.type";
 import {ActivatedRoute} from "@angular/router";
 
 @Component({

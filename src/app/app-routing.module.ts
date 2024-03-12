@@ -1,31 +1,22 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import {MainComponent} from "./components/main/main.component";
-import {CatalogComponent} from "./components/catalog/catalog.component";
-import {ProductComponent} from "./components/product/product.component";
-import {OrderComponent} from "./components/order/order.component";
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {LayoutComponent} from "./feature/layout.component";
 
 const routes: Routes = [
   {
     path: '',
-    component: MainComponent
-  },
-  {
-    path: 'catalog',
-    component: CatalogComponent
-  },
-  {
-    path: 'product/:id',
-    component: ProductComponent
-  },
-  {
-    path: 'order',
-    component: OrderComponent
-  },
+    component: LayoutComponent,
+    children: [
+      {path: '', loadChildren: () => import('./feature/main/main.module').then(m => m.MainModule)},
+      {path: 'order', loadChildren: () => import('./feature/order/order.module').then(m => m.OrderModule)},
+      {path: 'catalog', loadChildren: () => import('./feature/catalog/catalog.module').then(m => m.CatalogModule)},
+    ]
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, {useHash: true})],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}

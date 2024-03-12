@@ -7,7 +7,7 @@
                 <div class="card-body">
                     <h5 class="card-title">{{product.title}}</h5>
                     <p class="card-text">{{product.description | decorateProductDescription}}</p>
-                    <a [routerLink]="['/product', product.id]" class="btn btn-primary w-100 hvr-grow-shadow">Подробнее</a>
+                    <a [routerLink]="['/catalog', product.id]" class="btn btn-primary w-100 hvr-grow-shadow">Подробнее</a>
                 </div>
             </div>
         </div>
