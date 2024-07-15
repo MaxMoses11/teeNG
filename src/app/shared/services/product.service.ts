@@ -11,9 +11,9 @@ export class ProductService {
   constructor(private http: HttpClient) { }
 
   getProducts(): Observable<ProductType[]> {
-    return this.http.get<ProductType[]>('https://testologia.site/tea');
+    return this.http.get<ProductType[]>('https://testologia.ru/tea');
   }
   getProduct(id: number): Observable<ProductType> {
-    return this.http.get<ProductType>(`https://testologia.site/tea?id=${id}`);
+    return this.http.get<ProductType>(`https://testologia.ru/tea?id=${id}`);
   }
 }
