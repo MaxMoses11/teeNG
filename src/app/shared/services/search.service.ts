@@ -12,6 +12,6 @@ export class SearchService {
   constructor(private http: HttpClient) { }
 
   searchInCatalog(param: string) {
-    return this.http.get(`https://testologia.site/tea?search=${param}`);
+    return this.http.get(`https://testologia.ru/tea?search=${param}`);
   }
 }
